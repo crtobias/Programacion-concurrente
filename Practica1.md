@@ -1,7 +1,6 @@
 
 
 #### ejercicio 2
-![[Pasted image 20241020220401.png]]
 * *code*:
 * no existe riesgo de colision ya que no comparten caminos
 * es la misma area para todos pero diferente posicion de inicio
@@ -87,8 +86,6 @@ fin
 ```
 
 #### ejercicio 3
-![[Pasted image 20241020222700.png]]
-![[Pasted image 20241020222712.png]]
 * se podria hacer con cada area para cada escalera pero es muy dificil por lo que en este caso esta permitido usar un compartida.
 * *code*:
 ```R-info
@@ -158,4 +155,3 @@ fin
 ```
 
 #### Ejercicio 4
-![[Pasted image 20241020235723.png]]
