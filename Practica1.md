@@ -3,7 +3,8 @@
 #### ejercicio 2
 * *code*:
 * no existe riesgo de colision ya que no comparten caminos
-* es la misma area para todos pero diferente posicion de inicio
+* es la misma area para todos pero diferente posicion de inicio , aunque se deberia usar 
+un area privada para cada uno pero no lo hice 
 * *nota* : lo correcto seria asignar el area de cada robot , osea por asi decir su linea pero en este caso no lo hice.
 ```R-info
 
