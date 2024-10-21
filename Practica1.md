@@ -156,3 +156,91 @@ fin
 ```
 
 #### Ejercicio 4
+
+
+* *code*:
+```R-info
+programa ejemplo
+
+procesos
+  proceso cuadrado
+  comenzar
+    repetir 99
+      mover
+    derecha
+    mover
+    derecha
+    repetir 99
+      mover
+    repetir 3
+      derecha
+    mover
+    repetir 3
+      derecha
+    
+  fin
+  proceso recorrer
+  comenzar
+    repetir 12
+      cuadrado
+    repetir 99
+      mover
+  fin
+  
+areas
+  ciudad1: AreaP (1,1,25,100)
+  ciudad2: AreaP (26,1,50,100)
+  ciudad3: AreaP (51,1,75,100)
+  ciudad4: AreaP (76,1,100,100)
+  
+robots
+
+  robot tipo1
+  variables 
+    contador:numero
+  comenzar
+    Pos(1,1)
+    recorrer
+  fin
+  
+  robot tipo2
+  variables 
+    contador:numero
+  comenzar
+    Pos(26,1)
+    recorrer
+  fin
+  
+  robot tipo3
+  variables 
+    contador:numero
+  comenzar
+    Pos(51,1)
+    recorrer
+  fin
+  
+  robot tipo4
+  variables 
+    contador:numero
+  comenzar
+    Pos(76,1)
+    recorrer
+  fin
+
+variables
+  robot1 : tipo1
+  robot2 : tipo2
+  robot3 : tipo3
+  robot4 : tipo4
+comenzar
+  AsignarArea(robot1,ciudad1)
+  AsignarArea(robot2,ciudad2)
+  AsignarArea(robot3,ciudad3)
+  AsignarArea(robot4,ciudad4)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,26,1)
+  Iniciar(robot3,51,1)
+  Iniciar(robot4,76,1)
+  
+fin
+```
