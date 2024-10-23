@@ -248,6 +248,12 @@ fin
 # Practica 2
 * *nota*: me aparece el robot 1 no esta en la ciudad intente usar un area compartida entre todos pero me dice el mismo error , quizas un error de comunicacion o algo asi
 #### Ejercicio 1 B
+* *nota:* el 1 c y d es lo mismo pero copiar y pegar robots
+
+* el E , se puede hacer sin robot fiscalizador pero seria mucho quilombo ya que nesecitarias
+muchos tipos de robots y comunicarlos entre si para ver quien fue el ganador y seria mucho
+lio
+
 ```R-info
 
 
