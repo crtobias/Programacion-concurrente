@@ -247,7 +247,7 @@ fin
 
 # Practica 2
 * *nota*: me aparece el robot 1 no esta en la ciudad intente usar un area compartida entre todos pero me dice el mismo error , quizas un error de comunicacion o algo asi
-#### Ejercicio 1
+#### Ejercicio 1 B
 ```R-info
 
 
@@ -255,19 +255,19 @@ programa ejemplo
 procesos
   proceso recorrerAvenida(ES cant: numero)
   comenzar
-    derecha
     si(HayFlorEnLaEsquina)
+      tomarFlor
       cant:=cant+1
     repetir 9
       mover
       si(HayFlorEnLaEsquina)
         cant:=cant+1
+        tomarFlor
   fin
 areas
-  {ciudad3: AreaP(4,4,5,5)}
-  {ciudad1: AreaP (1,1,10,1)}
-  {ciudad2: AreaP (11,2,20,2)}
-  compartir: AreaC(1,1,100,100)
+  ciudad3: AreaP(2,1,2,1)
+  ciudad1: AreaP (1,1,1,10)
+  ciudad2: AreaP (2,11,2,20)
 robots
 
   robot RobotObrero
@@ -277,27 +277,38 @@ robots
     cant:=0
     RecibirMensaje(quien,Robot3)
     recorrerAvenida(cant)
-    EnviarMensaje(quien,robot3)
-    EnviarMensaje(cant,robot3)
+    EnviarMensaje(quien,Robot3)
+    EnviarMensaje(cant,Robot3)
   fin
   
   robot RobotLider
   variables
-    max,rmax,quien,f:numero
+    max,menor,quien,uno,dos:numero
   comenzar
-    max:=0
-    EnviarMensaje(1,robot1)
-    EnviarMensaje(2,robot2)
+    EnviarMensaje(1,Robot1)
+    EnviarMensaje(2,Robot2)
     repetir 2
       RecibirMensaje(quien,*)
       si(quien = 1)
-        RecibirMensaje(f,robot1)
+        RecibirMensaje(uno,Robot1)
       sino
-        RecibirMensaje(f,robot2)
-      si(f>=max)
-        max:=f
-        rmax:=quien
-      Informar(rmax)
+        RecibirMensaje(dos,Robot2)
+     
+    si(uno>dos)
+      menor:=dos
+      dos:=max
+      max:=uno
+      quien:=1
+    sino
+      menor:=uno
+      uno:=max
+      max:=dos
+      quien:=2
+        
+    
+        
+    Informar(max-menor)
+    Informar(quien)
   fin
   
   
@@ -308,17 +319,14 @@ variables
 comenzar
   
 
- { AsignarArea(Robot1, ciudad1)}
- { AsignarArea(Robot2, ciudad2)}
- { AsignarArea(Robot3, ciudad3)}
- 
-  AsignarArea(Robot1,compartir)
-  AsignarArea(Robot2,compartir)
-  AsignarArea(Robot3,compartir)
+
+  AsignarArea(Robot1,ciudad1)
+  AsignarArea(Robot2,ciudad2)
+  AsignarArea(Robot3,ciudad3)
   
   Iniciar(Robot1, 1,1)
-  Iniciar(Robot2, 11,2)
-  Iniciar(Robot3, 4,4)
+  Iniciar(Robot2, 2,11)
+  Iniciar(Robot3, 2,1)
  
   
 fin
