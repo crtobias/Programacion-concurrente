@@ -338,7 +338,8 @@ comenzar
 fin
 ```
 #### ejercicio 2
-* *nota :* en una parte dice el escalon es un numero random entre 1 y 5 , nose como hacer el numero random y creo que no se puede
+Random (var,1,5) usar esto al pasar los parametros de la escalera m yo le puse 3 pero se cambia por eso y listo para que sea random entre 1 y 5
+
 ```R-info
 
 
