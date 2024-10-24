@@ -337,4 +337,83 @@ comenzar
   
 fin
 ```
+#### ejercicio 2
+* *nota :* en una parte dice el escalon es un numero random entre 1 y 5 , nose como hacer el numero random y creo que no se puede
+```R-info
 
+
+programa ejemplo
+procesos
+  proceso recorrerEscalera(ES Esc: numero;ES Cant:numero)
+  variables
+    escF,escP:numero
+  comenzar
+    escF:=0
+    escP:=0
+    repetir Esc
+      mover
+      si(HayFlorEnLaEsquina)
+        escF:=escF+1
+      si(HayPapelEnLaEsquina)
+        escP:=escP+1
+    derecha
+    mover
+    si(HayFlorEnLaEsquina)
+      escF:=escF+1
+    si(HayPapelEnLaEsquina)
+      escP:=escP+1
+    repetir 3
+      derecha
+    si(escF>escP)
+      Cant:=Cant+1
+    
+  fin
+areas
+  ciudad : AreaC(1,1,100,100)
+robots
+  robot RobotObrero
+  variables
+    Quien,Esc,Cant:numero
+  comenzar
+    RecibirMensaje(Quien,RobotL)
+    RecibirMensaje(Esc,RobotL)
+    repetir 4
+      recorrerEscalera(Esc,Cant)
+    EnviarMensaje(Cant,RobotL)
+  fin
+  
+  robot RobotLider
+  variables
+    Rcant,Cant:numero
+  comenzar
+    Cant:=0
+    EnviarMensaje(1,Robot1)
+    EnviarMensaje(3,Robot1)
+    EnviarMensaje(2,Robot2)
+    EnviarMensaje(3,Robot2)
+    EnviarMensaje(3,Robot3)
+    EnviarMensaje(3,Robot3)
+    repetir 3  
+      RecibirMensaje(Rcant,*)
+      Cant:=Cant+Rcant
+    Informar(Cant)
+  fin
+  
+variables
+  Robot1: RobotObrero
+  Robot2: RobotObrero
+  Robot3: RobotObrero
+  RobotL: RobotLider
+comenzar
+  
+  AsignarArea(Robot1,ciudad)
+  AsignarArea(Robot2,ciudad)
+  AsignarArea(Robot3,ciudad)
+  AsignarArea(RobotL,ciudad) 
+  
+  Iniciar(Robot1,2,1)
+  Iniciar(Robot2,7,1)
+  Iniciar(Robot3,12,1)
+  Iniciar(RobotL,1,1)
+fin
+```
