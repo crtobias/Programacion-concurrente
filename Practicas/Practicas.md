@@ -1,3 +1,6 @@
+* *nota:* practicas que faltan porque me parecen repetitivas y son miy similares a otras que hice , 
+* practica 1  el ejercicio 1 y 5
+* practica 2 el ejercicio 3
 # Practica 1
 
 #### ejercicio 2
