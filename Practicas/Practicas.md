@@ -1,8 +1,8 @@
-* *nota:* practicas que faltan porque me parecen repetitivas y son muy similares a otras que hice ,
+* *nota:* practicas que faltan porque me parecen repetitivas y son muy similares a otras que hice :
 * practica 1  el ejercicio 1 y 5
 * practica 2 el ejercicio 3
+  
 # Practica 1
-
 #### ejercicio 2
 * *code*:
 * no existe riesgo de colision ya que no comparten caminos
@@ -419,5 +419,157 @@ comenzar
   Iniciar(Robot2,7,1)
   Iniciar(Robot3,12,1)
   Iniciar(RobotL,1,1)
+fin
+```
+# practica 3
+
+#### ejercicio 1
+```R-info
+
+programa ejemplo
+procesos
+  proceso RandomFlorero(ES a:numero;ES c:numero)
+  variables
+    ave,calle,aveV,calleV:numero
+  comenzar
+    Random(ave,1,5)
+    Random(calle,1,10)
+    BloquearEsquina(ave,calle)
+    Pos(ave,calle)
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+    aveV:=ave
+    calleV:=calle
+    repetir 4
+      Random(ave,1,5)
+      Random(calle,1,10)
+      BloquearEsquina(ave,calle)
+      Pos(ave,calle)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+      LiberarEsquina(aveV,calleV)
+      aveV:=ave
+      calleV:=calle
+    a:=ave
+    c:=calle
+  fin
+  
+  proceso RandomPapelero(ES a:numero;ES c:numero)
+  variables
+    ave,calle,aveV,calleV:numero
+  comenzar
+    Random(ave,6,10)
+    Random(calle,1,9)
+    BloquearEsquina(ave,calle)
+    Pos(ave,calle)
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+    aveV:=ave
+    calleV:=calle
+    repetir 4
+      Random(ave,6,10)
+      Random(calle,1,9)
+      BloquearEsquina(ave,calle)
+      Pos(ave,calle)
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
+      LiberarEsquina(aveV,calleV)
+      aveV:=ave
+      calleV:=calle
+    a:=ave
+    c:=calle
+  fin
+  
+  
+areas
+  inicioFloreros: AreaPC(6,10,7,10)
+  inicioPapeleros: AreaPC(8,10,9,10)
+  areaFloreros: AreaPC (1,1,5,10)
+  areaPapeleros: AreaPC (6,1,10,9)
+  areaLider: AreaP(11,1,11,1)
+  deposito:AreaC(10,10,10,10)
+robots
+  robot floreros
+  variables
+    ave,calle,quien:numero
+  comenzar
+    RecibirMensaje(quien,robot3)
+    
+    RandomFlorero(ave,calle)
+
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    LiberarEsquina(ave,calle)
+   
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
+    si(quien = 1)
+      Pos(6,10)
+    sino
+      Pos(7,10)  
+    LiberarEsquina(10,10)
+  fin
+  
+  robot papeleros
+  variables
+    ave,calle,quien:numero
+  comenzar
+    RecibirMensaje(quien,robot3)
+ 
+    RandomPapelero(ave,calle)
+      
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    LiberarEsquina(ave,calle)
+    
+    mientras(HayPapelEnLaBolsa)
+      depositarPapel
+    si(quien = 4)
+      Pos(8,10)
+    sino
+      Pos(9,10)  
+    LiberarEsquina(10,10)
+  fin
+  
+  robot lider
+  comenzar
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(4,robot4)
+    EnviarMensaje(5,robot5)
+  fin
+variables
+  robot1: floreros
+  robot2: floreros
+  robot3: lider
+  robot4: papeleros
+  robot5: papeleros
+comenzar
+  AsignarArea(robot4,inicioPapeleros)
+  AsignarArea(robot5,inicioPapeleros)
+  
+  AsignarArea(robot4,areaPapeleros)
+  AsignarArea(robot5,areaPapeleros)
+  
+  AsignarArea(robot4,deposito)
+  AsignarArea(robot5,deposito)
+  
+  AsignarArea(robot1,areaFloreros)
+  AsignarArea(robot2,areaFloreros)
+  
+  AsignarArea(robot1,deposito)
+  AsignarArea(robot2,deposito)
+  
+  AsignarArea(robot1,inicioFloreros)
+  AsignarArea(robot2,inicioFloreros)
+  
+  AsignarArea(robot3,areaLider)
+  
+  
+  Iniciar(robot3,11,1)
+  Iniciar(robot1,6,10)
+  Iniciar(robot2,7,10)
+  Iniciar(robot4,8,10)
+  Iniciar(robot5,9,10)
 fin
 ```
