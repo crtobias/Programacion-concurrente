@@ -1,7 +1,7 @@
 
  
  sintaxis del psuedo lenguaje rinfo 
-![[Pasted image 20241020231809.png]]
+
 iniciar( Robot1 , Avenida , Calle ) 
 Pos( numeroDeAvenida, numeroDeCalle )
 - AreaC : area compartida
