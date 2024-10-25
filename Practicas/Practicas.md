@@ -423,293 +423,147 @@ fin
 ```
 # practica 3
 
-#### ejercicio 1
-```R-info
-
-programa ejemplo
-procesos
-  proceso RandomFlorero(ES a:numero;ES c:numero)
-  variables
-    ave,calle,aveV,calleV:numero
-  comenzar
-    Random(ave,1,5)
-    Random(calle,1,10)
-    BloquearEsquina(ave,calle)
-    Pos(ave,calle)
-    mientras(HayFlorEnLaEsquina)
-      tomarFlor
-    aveV:=ave
-    calleV:=calle
-    repetir 4
-      Random(ave,1,5)
-      Random(calle,1,10)
-      BloquearEsquina(ave,calle)
-      Pos(ave,calle)
-      mientras(HayFlorEnLaEsquina)
-        tomarFlor
-      LiberarEsquina(aveV,calleV)
-      aveV:=ave
-      calleV:=calle
-    a:=ave
-    c:=calle
-  fin
-  
-  proceso RandomPapelero(ES a:numero;ES c:numero)
-  variables
-    ave,calle,aveV,calleV:numero
-  comenzar
-    Random(ave,6,10)
-    Random(calle,1,9)
-    BloquearEsquina(ave,calle)
-    Pos(ave,calle)
-    mientras(HayPapelEnLaEsquina)
-      tomarPapel
-    aveV:=ave
-    calleV:=calle
-    repetir 4
-      Random(ave,6,10)
-      Random(calle,1,9)
-      BloquearEsquina(ave,calle)
-      Pos(ave,calle)
-      mientras(HayPapelEnLaEsquina)
-        tomarPapel
-      LiberarEsquina(aveV,calleV)
-      aveV:=ave
-      calleV:=calle
-    a:=ave
-    c:=calle
-  fin
-  
-  
-areas
-  inicioFloreros: AreaPC(6,10,7,10)
-  inicioPapeleros: AreaPC(8,10,9,10)
-  areaFloreros: AreaPC (1,1,5,10)
-  areaPapeleros: AreaPC (6,1,10,9)
-  areaLider: AreaP(11,1,11,1)
-  deposito:AreaC(10,10,10,10)
-robots
-  robot floreros
-  variables
-    ave,calle,quien:numero
-  comenzar
-    RecibirMensaje(quien,robot3)
-    
-    RandomFlorero(ave,calle)
-
-    BloquearEsquina(10,10)
-    Pos(10,10)
-    LiberarEsquina(ave,calle)
-   
-    mientras(HayFlorEnLaBolsa)
-      depositarFlor
-    si(quien = 1)
-      Pos(6,10)
-    sino
-      Pos(7,10)  
-    LiberarEsquina(10,10)
-  fin
-  
-  robot papeleros
-  variables
-    ave,calle,quien:numero
-  comenzar
-    RecibirMensaje(quien,robot3)
- 
-    RandomPapelero(ave,calle)
-      
-    BloquearEsquina(10,10)
-    Pos(10,10)
-    LiberarEsquina(ave,calle)
-    
-    mientras(HayPapelEnLaBolsa)
-      depositarPapel
-    si(quien = 4)
-      Pos(8,10)
-    sino
-      Pos(9,10)  
-    LiberarEsquina(10,10)
-  fin
-  
-  robot lider
-  comenzar
-    EnviarMensaje(1,robot1)
-    EnviarMensaje(2,robot2)
-    EnviarMensaje(4,robot4)
-    EnviarMensaje(5,robot5)
-  fin
-variables
-  robot1: floreros
-  robot2: floreros
-  robot3: lider
-  robot4: papeleros
-  robot5: papeleros
-comenzar
-  AsignarArea(robot4,inicioPapeleros)
-  AsignarArea(robot5,inicioPapeleros)
-  
-  AsignarArea(robot4,areaPapeleros)
-  AsignarArea(robot5,areaPapeleros)
-  
-  AsignarArea(robot4,deposito)
-  AsignarArea(robot5,deposito)
-  
-  AsignarArea(robot1,areaFloreros)
-  AsignarArea(robot2,areaFloreros)
-  
-  AsignarArea(robot1,deposito)
-  AsignarArea(robot2,deposito)
-  
-  AsignarArea(robot1,inicioFloreros)
-  AsignarArea(robot2,inicioFloreros)
-  
-  AsignarArea(robot3,areaLider)
-  
-  
-  Iniciar(robot3,11,1)
-  Iniciar(robot1,6,10)
-  Iniciar(robot2,7,10)
-  Iniciar(robot4,8,10)
-  Iniciar(robot5,9,10)
-fin
-```
 #### ejercicio 3
 
 ```R-info
 
 programa ejemplo
+procesos
+  proceso AsignarId
+  variables
+    HayF:numero
+  comenzar
+    HayF:=3
+    EnviarMensaje(1,Robot1)
+    EnviarMensaje(2,Robot2)
+    EnviarMensaje(3,Robot3)
+    EnviarMensaje(4,Robot4)
+  fin
+  proceso volver(E id:numero)
+  comenzar
+    si(id=1)
+      Pos(2,1)
+    si(id=2)
+      Pos(3,1)
+    si(id=3)    
+      Pos(4,1)
+    si(id=4)
+      Pos(5,1)
+  fin
 areas
   ciudad: AreaC (1,1,100,100)
 robots
+
   robot Obrero
   variables
-    Quien,Ave,Calle,Final:numero
-    Hay,:boolean
+    id,HayF,Ave,Calle,Cant:numero
   comenzar
-    Hay:=V
-    RecibirMensaje(Final,RobotL)
-    si(Final=1)
-      RecibirMensaje(Quien,RobotL)
+    Cant:=0
+    RecibirMensaje(id,RobotL)
+    RecibirMensaje(HayF,RobotL)
+    
+    mientras(HayF=1)
       RecibirMensaje(Ave,RobotL)
       RecibirMensaje(Calle,RobotL)
       BloquearEsquina(Ave,Calle)
       Pos(Ave,Calle)
       si(HayFlorEnLaEsquina)
+        Cant:=Cant+1
         tomarFlor
-      si(~HayFlorEnLaEsquina)
-        Hay:=F
-      si(Quien=1)   
-        Pos(2,1)
-        LiberarEsquina(Ave,Calle)
-        EnviarMensaje(Hay,RobotL)
-      si(Quien=2)
-        Pos(3,1)
-        LiberarEsquina(Ave,Calle)
-        EnviarMensaje(Hay,RobotL)
-      si(Quien=3)
-        Pos(4,1)
-        LiberarEsquina(Ave,Calle)
-        EnviarMensaje(Hay,RobotL)
-      si(Quien=4)
-        Pos(5,1)
-        LiberarEsquina(Ave,Calle)
-        EnviarMensaje(Hay,RobotL)
-        
-    sino
-      EnviarMensaje(Hay,RobotL)
+      si(HayFlorEnLaEsquina)
+        HayF:=1
+      sino
+        HayF:=0     
+      EnviarMensaje(HayF,RobotL)  
+      volver(id)
+      LiberarEsquina(Ave,Calle)
+      RecibirMensaje(HayF,RobotL)
+    
+    EnviarMensaje(Cant,RobotL)
   fin
-  
+    
   robot Lider
   variables
-    Hay:boolean
-    r1,r2,r3,r4,Ave,Calle,A,Max,Rmax,Final:numero
+    HayF,max,maxr,Ave,Calle,r,r1,r2,r3,r4:numero
   comenzar
-    Max:=0
-    r1:=0
-    r2:=0
-    r3:=0
-    r4:=0
-    Hay:=V
-    Final:=1
+    max:=0
+    HayF:=1
+    AsignarId
     Random(Ave,2,10)
     Random(Calle,2,10)
-    mientras(Hay)
-      Random(A,1,4)
-      si(A=1)
-        EnviarMensaje(Final,Robot1)
-        EnviarMensaje(1,Robot1)
-        EnviarMensaje(Ave,Robot1)
-        EnviarMensaje(Calle,Robot1)
-        RecibirMensaje(Hay,Robot1)
-        r1:=r1+1
-      si(A=2)
-        EnviarMensaje(Final,Robot2)    
-        EnviarMensaje(2,Robot2)
-        EnviarMensaje(Ave,Robot2)
-        EnviarMensaje(Calle,Robot2)
-        RecibirMensaje(Hay,Robot2)
-        r2:=r2+1
-      si(A=3)
-        EnviarMensaje(Final,Robot3)
-        EnviarMensaje(3,Robot3)
-        EnviarMensaje(Ave,Robot3)
-        EnviarMensaje(Calle,Robot3)
-        RecibirMensaje(Hay,Robot3)      
-        r3:=r3+1    
-      sino
-        EnviarMensaje(Final,Robot4)
-        EnviarMensaje(4,Robot4)
-        EnviarMensaje(Ave,Robot4)
-        EnviarMensaje(Calle,Robot4)
-        RecibirMensaje(Hay,Robot4)  
-        r4:=r4+1
-    si(r1>Max)
-      Max:=r1
-      Rmax:=1
-    si(r2>Max)
-      Max:=r2
-      Rmax:=2
-    si(r3>Max)
-      Max:=r3   
-      Rmax:=3
-    si(r4>Max)
-      Max:=r4   
-      Rmax:=4
+    mientras(HayF=1) 
+      Random(r,1,4)
+      si(r=1)
+        EnviarMensaje(HayF,Robot1)    
+        EnviarMensaje(Ave,Robot1)    
+        EnviarMensaje(Calle,Robot1)    
+        RecibirMensaje(HayF,Robot1)
+
+      si(r=2)   
+        EnviarMensaje(HayF,Robot2)    
+        EnviarMensaje(Ave,Robot2)    
+        EnviarMensaje(Calle,Robot2)    
+        RecibirMensaje(HayF,Robot2)  
+
+      si(r=3)
+        EnviarMensaje(HayF,Robot3)    
+        EnviarMensaje(Ave,Robot3)    
+        EnviarMensaje(Calle,Robot3)    
+        RecibirMensaje(HayF,Robot3)
+
+      si(r=4)  
+        EnviarMensaje(HayF,Robot4)    
+        EnviarMensaje(Ave,Robot4)    
+        EnviarMensaje(Calle,Robot4)    
+        RecibirMensaje(HayF,Robot4)
+
+        
+    HayF:=0
+    EnviarMensaje(HayF,Robot1)
+    RecibirMensaje(r1,Robot1)
+    EnviarMensaje(HayF,Robot2)
+    RecibirMensaje(r2,Robot2)
+    EnviarMensaje(HayF,Robot3)
+    RecibirMensaje(r3,Robot3)
+    EnviarMensaje(HayF,Robot4)
+    RecibirMensaje(r4,Robot4)
+ 
+
+    si(r1>max)
+      max:=r1
+      maxr:=1
+    si(r2>max)
+      max:=r2
+      maxr:=2
+    si(r3>max)
+      max:=r3
+      maxr:=3
+    si(r4>max)
+      max:=r4
+      maxr:=4
       
-    Informar(Max)
-    Informar(Rmax)
-    
-    {Finalizo}
-    Final:=0
-    
-
-    EnviarMensaje(Final,Robot1)
-    EnviarMensaje(Final,Robot2)
-    EnviarMensaje(Final,Robot3)
-    EnviarMensaje(Final,Robot4)
-
+    Informar(max)
+    Informar(maxr)
   fin
   
   
 variables
-  RobotL : Lider
-  Robot1 : Obrero
-  Robot2 : Obrero
-  Robot3 : Obrero
-  Robot4 : Obrero
+  RobotL: Lider
+  Robot1: Obrero
+  Robot2: Obrero
+  Robot3: Obrero
+  Robot4: Obrero
 comenzar
-
   AsignarArea(RobotL, ciudad)
   AsignarArea(Robot1, ciudad)
   AsignarArea(Robot2, ciudad)
   AsignarArea(Robot3, ciudad)
   AsignarArea(Robot4, ciudad)
   
-
+  Iniciar(RobotL, 1,1)
   Iniciar(Robot1, 2,1)
   Iniciar(Robot2, 3,1)
   Iniciar(Robot3, 4,1)
   Iniciar(Robot4, 5,1)
-  Iniciar(RobotL, 1,1)
 fin
 ```
