@@ -1,8 +1,8 @@
 * *nota:* practicas que faltan porque me parecen repetitivas y son muy similares a otras que hice :
 * practica 1  el ejercicio 1 y 5
 * practica 2 el ejercicio 3
-  
 # Practica 1
+
 #### ejercicio 2
 * *code*:
 * no existe riesgo de colision ya que no comparten caminos
@@ -571,5 +571,145 @@ comenzar
   Iniciar(robot2,7,10)
   Iniciar(robot4,8,10)
   Iniciar(robot5,9,10)
+fin
+```
+#### ejercicio 3
+
+```R-info
+
+programa ejemplo
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot Obrero
+  variables
+    Quien,Ave,Calle,Final:numero
+    Hay,:boolean
+  comenzar
+    Hay:=V
+    RecibirMensaje(Final,RobotL)
+    si(Final=1)
+      RecibirMensaje(Quien,RobotL)
+      RecibirMensaje(Ave,RobotL)
+      RecibirMensaje(Calle,RobotL)
+      BloquearEsquina(Ave,Calle)
+      Pos(Ave,Calle)
+      si(HayFlorEnLaEsquina)
+        tomarFlor
+      si(~HayFlorEnLaEsquina)
+        Hay:=F
+      si(Quien=1)   
+        Pos(2,1)
+        LiberarEsquina(Ave,Calle)
+        EnviarMensaje(Hay,RobotL)
+      si(Quien=2)
+        Pos(3,1)
+        LiberarEsquina(Ave,Calle)
+        EnviarMensaje(Hay,RobotL)
+      si(Quien=3)
+        Pos(4,1)
+        LiberarEsquina(Ave,Calle)
+        EnviarMensaje(Hay,RobotL)
+      si(Quien=4)
+        Pos(5,1)
+        LiberarEsquina(Ave,Calle)
+        EnviarMensaje(Hay,RobotL)
+        
+    sino
+      EnviarMensaje(Hay,RobotL)
+  fin
+  
+  robot Lider
+  variables
+    Hay:boolean
+    r1,r2,r3,r4,Ave,Calle,A,Max,Rmax,Final:numero
+  comenzar
+    Max:=0
+    r1:=0
+    r2:=0
+    r3:=0
+    r4:=0
+    Hay:=V
+    Final:=1
+    Random(Ave,2,10)
+    Random(Calle,2,10)
+    mientras(Hay)
+      Random(A,1,4)
+      si(A=1)
+        EnviarMensaje(Final,Robot1)
+        EnviarMensaje(1,Robot1)
+        EnviarMensaje(Ave,Robot1)
+        EnviarMensaje(Calle,Robot1)
+        RecibirMensaje(Hay,Robot1)
+        r1:=r1+1
+      si(A=2)
+        EnviarMensaje(Final,Robot2)    
+        EnviarMensaje(2,Robot2)
+        EnviarMensaje(Ave,Robot2)
+        EnviarMensaje(Calle,Robot2)
+        RecibirMensaje(Hay,Robot2)
+        r2:=r2+1
+      si(A=3)
+        EnviarMensaje(Final,Robot3)
+        EnviarMensaje(3,Robot3)
+        EnviarMensaje(Ave,Robot3)
+        EnviarMensaje(Calle,Robot3)
+        RecibirMensaje(Hay,Robot3)      
+        r3:=r3+1    
+      sino
+        EnviarMensaje(Final,Robot4)
+        EnviarMensaje(4,Robot4)
+        EnviarMensaje(Ave,Robot4)
+        EnviarMensaje(Calle,Robot4)
+        RecibirMensaje(Hay,Robot4)  
+        r4:=r4+1
+    si(r1>Max)
+      Max:=r1
+      Rmax:=1
+    si(r2>Max)
+      Max:=r2
+      Rmax:=2
+    si(r3>Max)
+      Max:=r3   
+      Rmax:=3
+    si(r4>Max)
+      Max:=r4   
+      Rmax:=4
+      
+    Informar(Max)
+    Informar(Rmax)
+    
+    {Finalizo}
+    Final:=0
+    
+
+    EnviarMensaje(Final,Robot1)
+    EnviarMensaje(Final,Robot2)
+    EnviarMensaje(Final,Robot3)
+    EnviarMensaje(Final,Robot4)
+
+  fin
+  
+  
+variables
+  RobotL : Lider
+  Robot1 : Obrero
+  Robot2 : Obrero
+  Robot3 : Obrero
+  Robot4 : Obrero
+comenzar
+
+  AsignarArea(RobotL, ciudad)
+  AsignarArea(Robot1, ciudad)
+  AsignarArea(Robot2, ciudad)
+  AsignarArea(Robot3, ciudad)
+  AsignarArea(Robot4, ciudad)
+  
+
+  Iniciar(Robot1, 2,1)
+  Iniciar(Robot2, 3,1)
+  Iniciar(Robot3, 4,1)
+  Iniciar(Robot4, 5,1)
+  Iniciar(RobotL, 1,1)
 fin
 ```
