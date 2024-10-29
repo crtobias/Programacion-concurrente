@@ -422,7 +422,321 @@ comenzar
 fin
 ```
 # practica 3
+#### ejercicio 1
+* *nota:* me olvide de que agarren los papeles y las flores pero es lo de menos porque el recorrido esta bien
+```r-info
+programa ejemplo
+procesos
 
+  proceso FlorerosRecorrido(E quien:numero)
+  variables
+    ave,calle,memoa,memoc,contador:numero
+  comenzar 
+    contador:=0
+    Random(ave,1,5)  
+    Random(calle,1,10)  
+    memoa:=ave
+    memoc:=calle
+    BloquearEsquina(ave,calle)
+    Pos(ave,calle)
+    
+    mientras(contador<4)    
+      Random(ave,1,5)  
+      Random(calle,1,10)  
+      si(ave<>memoa | calle<>memoc)
+        BloquearEsquina(ave,calle)
+        Pos(ave,calle)
+        LiberarEsquina(memoa,memoc)
+        memoa:=ave
+        memoc:=calle
+        contador:=contador+1
+
+
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    LiberarEsquina(ave,calle)   
+    si(quien=1)
+      Pos(6,10)
+      LiberarEsquina(10,10)
+    sino
+      Pos(7,10)
+      LiberarEsquina(10,10)
+  fin
+  
+  
+  
+  proceso PapelerosRecorrido(E quien:numero)
+  variables
+    ave,calle,memoa,memoc,contador:numero
+  comenzar 
+    contador:=0
+    Random(ave,6,10)  
+    Random(calle,1,9)  
+    memoa:=ave
+    memoc:=calle
+    BloquearEsquina(ave,calle)
+    Pos(ave,calle)
+    
+    mientras(contador<4)    
+      Random(ave,6,10)  
+      Random(calle,1,9)  
+      si(ave<>memoa | calle<>memoc)
+        BloquearEsquina(ave,calle)
+        Pos(ave,calle)
+        LiberarEsquina(memoa,memoc)
+        memoa:=ave
+        memoc:=calle
+        contador:=contador+1
+
+
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    LiberarEsquina(ave,calle)   
+    si(quien=3)
+      Pos(8,10)
+      LiberarEsquina(10,10)
+    sino
+      Pos(9,10)
+      LiberarEsquina(10,10)
+  fin
+  
+  
+areas
+  floarea: AreaPC (1,1,5,10)
+  paparea: AreaPC (6,1,10,9)
+  robotF1: AreaP(6,10,6,10)
+  robotF2: AreaP(7,10,7,10)
+  robotP1: AreaP(8,10,8,10)
+  robotP2: AreaP(9,10,9,10)
+  deposito: AreaC(10,10,10,10)
+  alider: AreaP(11,11,11,11)
+  
+robots
+
+  robot Florero
+  variables
+    quien:numero
+  comenzar
+    RecibirMensaje(quien,RobotLider)
+    FlorerosRecorrido(quien)
+  fin
+  
+  robot Papelero
+  variables
+    quien:numero
+  comenzar
+    RecibirMensaje(quien,RobotLider)
+    PapelerosRecorrido(quien)
+  fin
+  
+  robot Lider
+  comenzar
+    EnviarMensaje(1,Robot1)
+    EnviarMensaje(2,Robot2)
+    EnviarMensaje(3,Robot3)
+    EnviarMensaje(4,Robot4)
+  fin
+  
+variables
+
+  RobotLider:Lider
+  Robot1:Florero
+  Robot2:Florero
+  Robot3:Papelero
+  Robot4:Papelero  
+  
+comenzar
+
+  AsignarArea(RobotLider,alider)
+
+  AsignarArea(Robot1,robotF1)
+  AsignarArea(Robot1,floarea)
+  AsignarArea(Robot1,deposito)
+  AsignarArea(Robot2,robotF2)
+  AsignarArea(Robot2,floarea)
+  AsignarArea(Robot2,deposito)
+  
+  AsignarArea(Robot3,robotP1)
+  AsignarArea(Robot3,paparea)
+  AsignarArea(Robot3,deposito)
+  AsignarArea(Robot4,robotP2)
+  AsignarArea(Robot4,paparea)
+  AsignarArea(Robot4,deposito)
+  
+  Iniciar(Robot1,6,10)
+  Iniciar(Robot2,7,10)
+  Iniciar(Robot3,8,10)
+  Iniciar(Robot4,9,10)
+  Iniciar(RobotLider,11,11)
+  
+fin
+```
+#### ejercicio 2
+```
+{Bienvenidos al entorno CMRE.
+Lo siguiente es un código de ejemplo que implementa un
+proceso que recibe un número de avenida como parámetro,
+se posiciona en esa avenida y la recorre.}
+
+programa ejemplo
+procesos
+
+  proceso GetFlores
+  comenzar  
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  
+  proceso GetPapeles
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+
+  proceso izq
+  comenzar
+    repetir 3
+      derecha
+  fin
+  
+areas
+  ciudad: AreaC (1,1,100,100)
+  
+robots
+
+  robot robot1
+  variables 
+    contador,junto:numero
+  comenzar
+    contador:=5
+    junto:=0
+    mientras(contador>0)
+      repetir contador
+        mover
+      derecha
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        junto:=junto+1
+      si(contador=1) 
+        BloquearEsquina(16,16)
+        EnviarMensaje(1,RobotL)
+      repetir contador
+        mover
+      izq
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        junto:=junto+1
+      contador:=contador-1
+    izq
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      junto:=junto+1
+    mover
+    
+    LiberarEsquina(16,16)
+    
+    contador:=2
+    mientras(contador<6)
+      repetir contador
+        mover
+      derecha
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        junto:=junto+1
+      repetir contador
+        mover
+      izq
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        junto:=junto+1
+      contador:=contador+1
+    Informar(junto)
+    EnviarMensaje(1,RobotL)
+  fin
+  
+  robot robot2
+  variables 
+    contador,junto:numero
+  comenzar
+    contador:=5
+    junto:=0
+    
+    mientras(contador>0)
+      repetir contador
+        mover
+      izq
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
+        junto:=junto+1
+      si(contador=1) 
+        BloquearEsquina(16,16)
+        EnviarMensaje(2,RobotL)
+      repetir contador
+        mover
+      derecha
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
+        junto:=junto+1
+      contador:=contador-1
+    derecha
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      junto:=junto+1
+    mover
+    
+    LiberarEsquina(16,16)
+    
+    contador:=2
+    mientras(contador<6)
+      repetir contador
+        mover
+      izq
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
+        junto:=junto+1
+      repetir contador
+        mover
+      derecha
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
+        junto:=junto+1
+      contador:=contador+1
+    Informar(junto)
+    EnviarMensaje(1,RobotL)
+  fin
+  
+  robot Lider
+  variables
+    quien,qgano,termino:numero
+  comenzar
+    qgano:=0        
+    repetir 2
+      RecibirMensaje(quien,*)
+      si(qgano = 0)
+        qgano:=quien
+        
+    repetir 2
+      RecibirMensaje(termino,*)
+      
+          
+    Informar(qgano)     
+  fin
+  
+variables
+  RobotL: Lider
+  R1: robot1
+  R2: robot2
+comenzar
+  AsignarArea(RobotL, ciudad)
+  AsignarArea(R1, ciudad)
+  AsignarArea(R2, ciudad)
+  
+  Iniciar(RobotL, 15,1)
+  Iniciar(R1, 1,1)
+  Iniciar(R2, 31,1)
+  
+fin
+```
 #### ejercicio 3
 
 ```R-info
@@ -567,3 +881,429 @@ comenzar
   Iniciar(Robot4, 5,1)
 fin
 ```
+
+
+#### ejercicio 4
+* *notas:*
+  el 4-B es solamente una variante de que camina demas . no la hago porque es simplemente agregar un pos , bloquear esquina y liberar esquina extra.
+```r-info
+
+programa ejemplo
+procesos
+  proceso asignarId
+  comenzar
+    EnviarMensaje(1,Robot1)
+    EnviarMensaje(2,Robot2)
+    EnviarMensaje(3,Robot3)
+    EnviarMensaje(4,Robot4)
+  fin
+areas
+  compartida:AreaC(10,10,11,11)
+  arL: AreaP (1,1,1,1)
+  area1: AreaP(9,9,9,9)
+  area2: AreaP(9,10,9,10)
+  area3: AreaP(9,11,9,11)
+  area4: AreaP(9,12,9,12)
+robots
+
+  robot Obrero
+  variables
+    id,hayFlor:numero
+  comenzar
+    hayFlor:=1
+    RecibirMensaje(id,RobotL)
+    
+    mientras(hayFlor=1)
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      si(HayFlorEnLaEsquina)
+        tomarFlor
+      sino
+        hayFlor:=0
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      si(HayFlorEnLaBolsa)
+        depositarFlor
+      LiberarEsquina(10,10)
+      si(id=1)
+        Pos(9,9)
+        LiberarEsquina(11,11)
+      si(id=2)
+        Pos(9,10)
+        LiberarEsquina(11,11)
+      si(id=3)  
+        Pos(9,11)
+        LiberarEsquina(11,11)
+      si(id=4)
+        Pos(9,12)
+        LiberarEsquina(11,11)  
+    
+    EnviarMensaje(1,RobotL)
+  fin
+  
+  robot Lider
+  variables
+    listo:numero
+  comenzar
+    asignarId
+    repetir 4
+      RecibirMensaje(listo,*)
+    Pos(11,11)
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor 
+    
+  fin
+  
+variables
+  RobotL:Lider
+  Robot1:Obrero
+  Robot2:Obrero
+  Robot3:Obrero
+  Robot4:Obrero
+comenzar
+  AsignarArea(RobotL, arL)
+  AsignarArea(RobotL, compartida)
+  
+  AsignarArea(Robot1, area1)
+  AsignarArea(Robot1, compartida)
+  
+  AsignarArea(Robot2, area2)
+  AsignarArea(Robot2, compartida)
+  
+  AsignarArea(Robot3, area3)
+  AsignarArea(Robot3, compartida)
+  
+  AsignarArea(Robot4, area4)
+  AsignarArea(Robot4, compartida)
+
+
+  Iniciar(Robot1,9,9)
+  Iniciar(Robot2,9,10)
+  Iniciar(Robot3,9,11)
+  Iniciar(Robot4,9,12)
+  Iniciar(RobotL, 1,1)
+fin
+```
+
+
+#### ejercicio 5
+
+```
+programa ejemplo
+procesos
+  proceso asignarId
+  comenzar
+    EnviarMensaje(1,Robot1)
+    EnviarMensaje(2,Robot2)
+    EnviarMensaje(3,Robot3)
+    EnviarMensaje(4,Robot4)
+  fin
+areas
+  Area1: AreaP (4,1,4,100)
+  Area2: AreaP (6,1,6,100)
+  Area3: AreaP (8,1,8,100)
+  Area4: AreaP (10,1,10,100)
+  deposito: AreaPC(11,11,11,11)
+  AreaL:AreaP(1,1,1,1)
+robots
+
+  robot Participante
+  variables
+    id,calle,avenida:numero
+    ok:boolean
+  comenzar
+    RecibirMensaje(id,RobotL)
+    calle:=1
+    
+    si(id=1)
+      avenida:=4
+    si(id=2)
+      avenida:=6
+    si(id=3)
+      avenida:=8
+    si(id=4)
+      avenida:=10
+    
+    
+    BloquearEsquina(11,11)
+    Pos(11,11)
+    si(HayFlorEnLaEsquina)
+      ok:=V
+      calle:=calle+1
+      tomarFlor
+    sino
+      ok:=F
+    Pos(avenida,calle)
+    si(HayFlorEnLaBolsa)
+      depositarFlor
+    LiberarEsquina(11,11)
+    
+    mientras(ok)
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      si(HayFlorEnLaEsquina)
+        ok:=V
+        calle:=calle+1
+        tomarFlor
+      sino
+        ok:=F
+      Pos(avenida,calle)
+      si(HayFlorEnLaBolsa)
+        depositarFlor
+      LiberarEsquina(11,11)
+    
+    EnviarMensaje(id,RobotL)
+    EnviarMensaje(calle,RobotL)
+  fin
+  
+  robot Lider
+  variables
+    Ganador,Calle,MaxG,MaxC:numero
+  comenzar
+    asignarId
+    
+    MaxG:=0
+    MaxC:=0
+    
+    repetir 4
+      RecibirMensaje(Ganador,*)
+      RecibirMensaje(Calle,*)
+      si(Calle>MaxC)
+        MaxG:=Ganador
+        MaxC:=Calle
+        
+    Informar(MaxG)
+    Informar(MaxC)
+  fin
+  
+  
+variables
+  RobotL: Lider
+  Robot1: Participante
+  Robot2: Participante
+  Robot3: Participante
+  Robot4: Participante
+comenzar
+  AsignarArea(RobotL, AreaL)
+  
+  AsignarArea(Robot1,Area1)
+  AsignarArea(Robot1,deposito)
+  
+  AsignarArea(Robot2,Area2)
+  AsignarArea(Robot2,deposito)
+  
+  AsignarArea(Robot3,Area3)
+  AsignarArea(Robot3,deposito)
+  
+  AsignarArea(Robot4,Area4)
+  AsignarArea(Robot4,deposito)
+  
+  Iniciar(RobotL,1,1)
+  Iniciar(Robot1,4,1)
+  Iniciar(Robot2,6,1)
+  Iniciar(Robot3,8,1)
+  Iniciar(Robot4,10,1)
+  
+fin
+```
+
+#### ejercicio 6
+* *nota:* el ejercicio es muy largo y no hice los otros puntos
+
+```R-info
+
+programa ejemplo
+
+procesos
+
+
+  proceso cuadranteFlores(E ix:numero;E iy:numero;E x:numero;E y:numero)
+  variables
+    alto,largo,ave,calle:numero
+  comenzar
+    largo:=x
+    alto:=y
+    ave:=ix
+    calle:=iy
+    derecha
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+    mientras(alto>0)    
+      alto:=alto-1
+      repetir largo
+        mientras(HayFlorEnLaEsquina)
+          tomarFlor
+        mover
+      calle:=calle+1
+      si(alto <> 0)
+        Pos(ave,calle) 
+  fin
+  
+  proceso cuadranteFloresPapeles(E ix:numero;E iy:numero;E x:numero;E y:numero)
+  variables
+    alto,largo,ave,calle:numero
+  comenzar
+    largo:=x
+    alto:=y
+    ave:=ix
+    calle:=iy
+    derecha
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+    mientras(alto>0)    
+      alto:=alto-1
+      repetir largo
+        mientras(HayFlorEnLaEsquina)
+          tomarFlor
+        mientras(HayPapelEnLaEsquina)
+          tomarPapel
+        mover
+      calle:=calle+1
+      si(alto <> 0)
+        Pos(ave,calle) 
+  fin
+
+  proceso cuadrantePapeles(E ix:numero;E iy:numero;E x:numero;E y:numero)
+  variables
+    alto,largo,ave,calle:numero
+  comenzar
+    largo:=x
+    alto:=y
+    ave:=ix
+    calle:=iy
+    derecha
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+    mientras(alto>0)    
+      alto:=alto-1
+      repetir largo
+        mientras(HayPapelEnLaEsquina)
+          tomarPapel
+        mover
+      calle:=calle+1
+      si(alto <> 0)
+        Pos(ave,calle) 
+  fin
+  
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot robot1
+  variables
+    id,calle,cont:numero
+  comenzar
+    cont:=1
+    RecibirMensaje(id,RobotL)
+    cuadranteFlores(2,2,5,5)
+    
+    EnviarMensaje(1,RobotL)
+    RecibirMensaje(calle,RobotL)
+    Pos(1,calle)
+
+    mientras(HayFlorEnLaBolsa & (cont<100))
+      depositarFlor
+      cont:=cont+1
+      mover
+      
+    EnviarMensaje(1,RobotL)
+  fin
+  robot robot2
+  variables
+    id,calle,cont:numero
+  comenzar
+    cont:=1
+    RecibirMensaje(id,RobotL)
+    cuadranteFloresPapeles(5,5,10,10)
+    
+    EnviarMensaje(2,RobotL)
+    RecibirMensaje(calle,RobotL)
+    Pos(1,calle)
+    
+    mientras(HayPapelEnLaBolsa & HayFlorEnLaBolsa & (cont<100))
+      depositarPapel
+      depositarFlor
+      cont:=cont+1
+      mover
+      
+    EnviarMensaje(1,RobotL)
+  fin
+  
+  robot robot3
+  variables
+    id,calle,cont:numero
+  comenzar
+    cont:=1
+    RecibirMensaje(id,RobotL)
+    cuadrantePapeles(9,9,7,7)
+    
+    EnviarMensaje(3,RobotL)
+    RecibirMensaje(calle,RobotL)
+    Pos(1,calle)
+    
+    mientras(HayPapelEnLaBolsa & (cont<100))
+      depositarPapel
+      cont:=cont+1
+      mover
+      
+    EnviarMensaje(1,RobotL)
+  fin
+  
+  robot robotL
+  variables
+    primero,segundo,tercero,termino:numero
+  comenzar
+    EnviarMensaje(1,Robot1)
+    EnviarMensaje(2,Robot2)
+    EnviarMensaje(3,Robot3)
+    
+    RecibirMensaje(primero,*)
+    RecibirMensaje(segundo,*)
+    RecibirMensaje(tercero,*)
+    
+    si(primero=1)
+      EnviarMensaje(20,Robot1)
+    si(primero=2)
+      EnviarMensaje(20,Robot2)
+    si(primero=3)
+      EnviarMensaje(20,Robot3)
+      
+    si(segundo=1)
+      EnviarMensaje(21,Robot1)
+    si(segundo=2)
+      EnviarMensaje(21,Robot2)
+    si(segundo=3)
+      EnviarMensaje(21,Robot3)  
+      
+    si(tercero=1)
+      EnviarMensaje(22,Robot1)
+    si(tercero=2)
+      EnviarMensaje(22,Robot2)
+    si(tercero=3)
+      EnviarMensaje(22,Robot3)
+       
+    repetir 3
+      RecibirMensaje(termino,*)
+  fin
+  
+variables
+  RobotL: robotL
+  Robot1: robot1
+  Robot2: robot2
+  Robot3: robot3
+comenzar
+  AsignarArea(RobotL, ciudad)
+  AsignarArea(Robot1, ciudad)
+  AsignarArea(Robot2, ciudad)
+  AsignarArea(Robot3, ciudad)
+  
+  Iniciar(Robot1,2,2)
+  Iniciar(Robot2,5,5)
+  Iniciar(Robot3,9,9)
+  Iniciar(RobotL,1,1)
+  
+fin
+```
+
+#### practica 4
