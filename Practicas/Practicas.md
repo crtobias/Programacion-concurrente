@@ -1,10 +1,6 @@
 * *nota:* practicas que faltan porque me parecen repetitivas y son muy similares a otras que hice :
-* practica 1 : el ejercicio 1 y 5
-* practica 2 : el ejercicio 3 y 4
-* Practica 3 *Completa*
-
-
-
+* practica 1  el ejercicio 1 y 5
+* practica 2 el ejercicio 3
 # Practica 1
 
 #### ejercicio 2
@@ -1311,3 +1307,105 @@ fin
 ```
 
 #### practica 4
+
+
+#### ejercicio 1
+
+ * no lo hago porque lo que busco es aprender concurrencia no a decifrar consignas mal redactadas. (Mucho lore el enunciado)
+
+#### ejercicio 2
+
+```
+programa ejemplo
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+
+  robot Productor
+  variables
+    cont,ave,calle:numero
+  comenzar
+    cont:=0
+    ave:=  PosAv
+    calle:= PosCa
+    
+    mientras(calle < 100)
+      mientras(cont<5)
+      
+        mientras(HayFlorEnLaEsquina & (cont<5))
+          tomarFlor
+          cont:=cont+1
+        si(calle<100)
+          mover
+          ave:=  PosAv
+          calle:= PosCa
+        sino
+          cont:=5
+        
+        
+      cont:=0
+      
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      repetir 5
+        si(HayFlorEnLaBolsa)
+          depositarFlor
+      Pos(ave,calle)
+      LiberarEsquina(50,50)
+     
+  fin
+  
+  robot Consumidor
+  variables
+    calle,ave,ran,cont:numero
+    llave:boolean
+  comenzar
+    llave:=V
+    calle:=PosCa
+    ave:=PosAv
+    cont:=0
+    
+    mientras(llave)
+      Random(ran,2,5)
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      
+      
+      si(HayFlorEnLaEsquina)
+        repetir ran
+          si(HayFlorEnLaEsquina)
+            tomarFlor
+            cont:=0
+      sino
+        cont:=cont+1
+        si(cont=8)
+          llave:=F
+      
+
+      Pos(ave,calle)
+      LiberarEsquina(50,50)
+      repetir ran
+        si(HayFlorEnLaBolsa)
+          depositarFlor
+    
+  fin
+  
+  
+variables
+  R1:Productor
+  R2:Productor
+  R3:Consumidor
+  R4:Consumidor
+comenzar
+  AsignarArea(R1, ciudad)
+  AsignarArea(R2, ciudad)
+  AsignarArea(R3, ciudad)
+  AsignarArea(R4, ciudad)
+  
+  Iniciar(R1, 5,1)
+  Iniciar(R2, 10,1)
+  Iniciar(R3, 11,1)
+  Iniciar(R4, 12,1)
+  
+fin
+```
