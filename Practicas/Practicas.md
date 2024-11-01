@@ -1318,7 +1318,11 @@ fin
 ```
 programa ejemplo
 areas
-  ciudad: AreaC (1,1,100,100)
+  deposito: AreaC(50,50,50,50)
+  a1:AreaP(5,1,5,100)
+  a2:AreaP(10,1,10,100)
+  a3:AreaP(11,1,11,1)
+  a4:AreaP(12,1,12,1)
 robots
 
   robot Productor
@@ -1397,10 +1401,14 @@ variables
   R3:Consumidor
   R4:Consumidor
 comenzar
-  AsignarArea(R1, ciudad)
-  AsignarArea(R2, ciudad)
-  AsignarArea(R3, ciudad)
-  AsignarArea(R4, ciudad)
+  AsignarArea(R1, a1)
+  AsignarArea(R1, deposito)
+  AsignarArea(R2, a2)
+  AsignarArea(R2, deposito)
+  AsignarArea(R3, a3)
+  AsignarArea(R3, deposito)
+  AsignarArea(R4, a4)
+  AsignarArea(R4, deposito)
   
   Iniciar(R1, 5,1)
   Iniciar(R2, 10,1)
@@ -1409,3 +1417,203 @@ comenzar
   
 fin
 ```
+
+#### ejercicio 3-A
+* *nota:* no asigne las areas privadas pero son 3 lineas de codigo mas , por lo tanto lo deje pasar , son 4 areas privadas 1 para cada robot.
+```R-info
+programa ejemplo
+procesos
+  proceso recorrido
+  comenzar
+    si(PosCa<100)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+      mover
+  fin
+  proceso asignarId
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  proceso enviarPermiso
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot tipo1
+  variables
+    id,perm:numero
+  comenzar
+    RecibirMensaje(id,rj)
+    mientras(PosCa<100)
+      RecibirMensaje(perm,rj)
+      recorrido
+      si(PosCa=100)
+        EnviarMensaje(0,rj)
+      sino
+        EnviarMensaje(1,rj)
+  fin
+  robot tipo2
+  variables
+    termino:numero
+  comenzar
+    termino:=1
+    asignarId
+    mientras(termino=1)
+      enviarPermiso
+      repetir 3
+        RecibirMensaje(termino,*)
+        
+    Informar(55)
+  fin
+variables
+  rj:tipo2
+  r1:tipo1
+  r2:tipo1
+  r3:tipo1
+comenzar
+  AsignarArea(rj,ciudad)
+  AsignarArea(r1,ciudad)
+  AsignarArea(r2,ciudad)
+  AsignarArea(r3,ciudad)
+  
+  Iniciar(rj,10,10)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,1)
+  Iniciar(r3,3,1)
+fin
+```
+#### ejercicio 3-B
+* *nota:* no asigne las areas privadas pero son 3 lineas de codigo mas , por lo tanto lo deje pasar , son 4 areas privadas 1 para cada robot.
+* *nota:* cambie el sistema de sincronizacion ya que podian terminar en 1 sola etapa un robot y el programa quedaba congelado , entonces en este sistema si un robot llega a terminar su recorrido antes que los demas es sacado del sistema de sincronizacion por asi decir y el programa no rompe
+
+```R-info
+programa ejemplo
+procesos
+  proceso recorrido(E x:numero)
+  variables
+    cont:numero
+  comenzar
+    mientras((cont<>x) & (PosCa<100))
+      si(PosCa<100)
+        si(HayFlorEnLaEsquina)
+          tomarFlor
+          cont:=cont+1
+        sino
+          si(PosCa<100)
+            mover
+    Informar(2)
+  fin
+  
+  proceso asignarId
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  
+  proceso RecibirMsj(ES t1:numero;ES t2:numero;ES t3:numero)
+  variables
+    id:numero
+  comenzar
+    RecibirMensaje(id,*)
+    si(id=1)   
+      RecibirMensaje(t1,*)
+    si(id=2) 
+      RecibirMensaje(t2,*) 
+    si(id=3) 
+      RecibirMensaje(t3,*) 
+  fin
+  
+  
+  
+  
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot tipo1
+  variables
+    id,perm,x:numero
+  comenzar
+    RecibirMensaje(id,rj)
+    mientras(PosCa<100)
+      RecibirMensaje(perm,rj)
+      
+      Random(x,1,5)
+      recorrido(x)
+      
+      
+      si(PosCa=100)
+        EnviarMensaje(id,rj)
+        EnviarMensaje(0,rj)
+      sino
+        EnviarMensaje(id,rj)
+        EnviarMensaje(1,rj)
+        
+  fin
+  robot tipo2
+  variables
+    t1,t2,t3,total:numero
+    activo:boolean
+  comenzar
+    t1:=1
+    t2:=1
+    t3:=1
+    activo:=V
+    total:=0
+    asignarId
+    
+    mientras(activo)
+      si(t1=1)
+        EnviarMensaje(1,r1)
+      si(t2=1)
+        EnviarMensaje(1,r2)
+      si(t3=1)
+        EnviarMensaje(1,r3)
+        
+      total:= total+t1
+      total:= total+t2
+      total:= total+t3
+      
+      
+      si(total=1)
+        RecibirMsj(t1,t2,t3)
+      si(total=2)
+        repetir 2
+          RecibirMsj(t1,t2,t3)
+      si(total=3)      
+        repetir 3
+          RecibirMsj(t1,t2,t3)
+      
+      si(t1=0)
+        si(t2=0)
+          si(t3=0)
+            activo:=F
+      
+      total:=0 
+    Informar(55)
+  fin
+variables
+  rj:tipo2
+  r1:tipo1
+  r2:tipo1
+  r3:tipo1
+comenzar
+  AsignarArea(rj,ciudad)
+  AsignarArea(r1,ciudad)
+  AsignarArea(r2,ciudad)
+  AsignarArea(r3,ciudad) 
+  
+  Iniciar(rj,10,10)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,1)
+  Iniciar(r3,3,1)
+fin
+```
+
+
