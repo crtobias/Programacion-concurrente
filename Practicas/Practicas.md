@@ -1489,8 +1489,7 @@ comenzar
 fin
 ```
 #### ejercicio 3-B
-* *nota:* no asigne las areas privadas pero son 3 lineas de codigo mas , por lo tanto lo deje pasar , son 4 areas privadas 1 para cada robot.
-* *nota:* cambie el sistema de sincronizacion ya que podian terminar en 1 sola etapa un robot y el programa quedaba congelado , entonces en este sistema si un robot llega a terminar su recorrido antes que los demas es sacado del sistema de sincronizacion por asi decir y el programa no rompe
+* *nota:* en este ejercicio el lider solo deberia asignar el id por lo tanto lo hice mal porque lo estoy usando para acciones extras que no son asignar id (pronto lo cambiare)
 
 ```R-info
 programa ejemplo
@@ -1617,3 +1616,113 @@ fin
 ```
 
 
+#### ejercicio 4
+
+```rinfo
+{Bienvenidos al entorno CMRE.
+Lo siguiente es un código de ejemplo que implementa un
+proceso que recibe un número de avenida como parámetro,
+se posiciona en esa avenida y la recorre.}
+
+programa ejemplo
+
+procesos
+  proceso asignarId
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+  fin
+  
+  proceso vaciarBolsa
+  comenzar
+    si(HayFlorEnLaBolsa)
+      mientras(HayFlorEnLaBolsa)
+        depositarFlor
+        
+    si(HayPapelEnLaBolsa)
+      mientras(HayPapelEnLaBolsa)
+        depositarPapel
+  fin
+  
+areas
+  ciudad: AreaC (1,1,100,100)
+  
+  
+robots
+
+  robot Trabajador
+  variables
+    avei,callei,id,tarea,calle,ave:numero
+  comenzar
+    RecibirMensaje(id,rj)
+    avei:=PosAv
+    callei:=PosCa    
+    
+
+    RecibirMensaje(tarea,rj)
+    mientras(tarea<>4)
+      RecibirMensaje(ave,rj)
+      RecibirMensaje(calle,rj)
+      
+      BloquearEsquina(ave,calle)
+      Pos(ave,calle)
+      si(tarea=1)
+        mientras(HayFlorEnLaEsquina)
+          tomarFlor
+      si(tarea=2)
+        mientras(HayPapelEnLaEsquina)
+          tomarPapel
+      si(tarea=3)
+        vaciarBolsa
+        
+      Pos(avei,callei)
+      LiberarEsquina(ave,calle)
+      
+      RecibirMensaje(tarea,rj)
+  fin
+  
+  robot Jefe
+  variables
+    ave,calle,tarea,rb:numero
+  comenzar
+    
+    asignarId
+    
+    repetir 10
+      Random(ave,2,100)
+      Random(calle,2,100)
+      Random(tarea,1,4)
+      Random(rb,1,2)
+      
+      si(rb=1)
+        EnviarMensaje(tarea,r1)
+        EnviarMensaje(ave,r1)
+        EnviarMensaje(calle,r1)
+      si(rb=2)
+        EnviarMensaje(tarea,r2)
+        EnviarMensaje(ave,r2)
+        EnviarMensaje(calle,r2)
+      
+    EnviarMensaje(4,r1) 
+    EnviarMensaje(4,r2) 
+      
+  fin
+  
+  
+variables
+  r1:Trabajador
+  r2:Trabajador
+  rj:Jefe
+comenzar
+  AsignarArea(r1,ciudad)
+  AsignarArea(r2,ciudad)
+  AsignarArea(rj,ciudad)
+  Iniciar(rj,1,1)
+  Iniciar(r1,2,1)
+  Iniciar(r2,3,1)
+fin
+```
+
+### preguntas :
+* siempre tienen que tener id los trabajadores o los robots repetidos?
+* si no dice que se tiene que usar un robot fiscalizador lo puedo usar igual o asumo que no deberia usarlo?
