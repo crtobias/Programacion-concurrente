@@ -1306,7 +1306,7 @@ comenzar
 fin
 ```
 
-#### practica 4
+# practica 4
 
 
 #### ejercicio 1
@@ -1723,6 +1723,273 @@ comenzar
 fin
 ```
 
-### preguntas :
+# practica 5
+
+#### ejercicio 1
+
+* *nota:* en este ejercicio hay 4 esquinas por las cuales pueden chochar , cuando se acerca 1 robot bloqueo las dos esquinas por las que tiene que pasar , creo que seria mas eficiente bloquear 1 mover  y dsp bloquear la otra pero nose .
+
+
+```r-info
+
+{2,98 2,99 3,98   3,99}
+programa ejemplo
+areas
+  aFisca: AreaP (1,1,1,1)
+  
+  
+  r1:  AreaP(2,1,2,97)
+  ar1: AreaP(2,100,2,100)
+  r2:  AreaP(3,1,3,97)
+  ar2: AreaP(3,100,3,100)
+  
+  
+  a1:  AreaP(1,98,1,98)
+  aa1: AreaP(4,98,100,98)
+  
+  a2:  AreaP(1,99,1,99)
+  aa2: AreaP(4,99,100,99)
+  
+  a298:AreaPC (2,98,2,98)
+  a299:AreaPC (2,99,2,99)
+  a398:AreaPC (3,98,3,98)
+  a399:AreaPC (3,99,3,99)
+  
+robots
+  robot tipo1
+  variables
+    av,cont,id:numero
+  comenzar
+    av:=PosAv
+    cont:=0
+    RecibirMensaje(id,Rf)
+    mientras(PosCa<100)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        cont:=cont+1
+      si(PosCa=97)
+        BloquearEsquina(av,98)
+        BloquearEsquina(av,99)
+        mientras(PosCa<=99)
+          mientras(HayFlorEnLaEsquina)
+            tomarFlor
+            cont:=cont+1
+          mover
+        LiberarEsquina(av,98)
+        LiberarEsquina(av,99)
+      sino
+        mover  
+    
+    EnviarMensaje(id,Rf)
+    EnviarMensaje(cont,Rf)    
+  fin
+  robot tipo2
+  variables
+    ca,cont,id:numero
+  comenzar
+    RecibirMensaje(id,Rf)
+    ca:=PosCa
+    cont:=0
+    derecha
+    mientras(PosAv<100)
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
+        cont:=cont+1
+      si(ca=1)
+        BloquearEsquina(2,ca)
+        BloquearEsquina(3,ca)
+        mientras(PosAv<=3)
+          mientras(HayPapelEnLaEsquina)
+            tomarPapel
+            cont:=cont+1
+          mover
+        LiberarEsquina(2,ca)
+        LiberarEsquina(3,ca)
+      sino
+        mover
+    
+    EnviarMensaje(id,Rf)
+    EnviarMensaje(cont,Rf)
+  fin
+  robot fisca
+  variables
+    idActual,memo,t1,t2:numero
+  comenzar
+    t1:=0
+    t2:=0
+  
+    EnviarMensaje(1,R1)
+    EnviarMensaje(2,R2)
+    EnviarMensaje(3,A1)
+    EnviarMensaje(4,A2)
+    
+    repetir 4
+      RecibirMensaje(idActual,*)
+      si(idActual = 1 | idActual = 2 )
+        RecibirMensaje(memo,*)
+        t1:=t1+memo
+        memo:=0
+      sino
+        RecibirMensaje(memo,*)
+        t2:=t2+memo
+        memo:=0
+    
+         
+    si(t1>t2)
+      Informar(1)
+      Informar(t1)
+    sino
+      Informar(2)
+      Informar(t2)
+  fin
+variables
+  R1: tipo1
+  R2: tipo1
+  A1: tipo2
+  A2: tipo2
+  Rf: fisca
+comenzar
+  AsignarArea(Rf, aFisca)
+
+  AsignarArea(R1, a299)
+  AsignarArea(R1, a298)
+  AsignarArea(R1, r1)
+  AsignarArea(R1, ar1)
+  
+  AsignarArea(R2, a399)
+  AsignarArea(R2, a398)
+  AsignarArea(R2, r2)
+  AsignarArea(R2, ar2)
+  
+  AsignarArea(A1, a1)
+  AsignarArea(A1, aa1)
+  
+  AsignarArea(A1, a398)
+  AsignarArea(A1, a298)
+  
+  AsignarArea(A2, a2)
+  AsignarArea(A2, aa2)
+  
+  AsignarArea(A2, a299)
+  AsignarArea(A2, a399)
+  
+  Iniciar(A1, 1,98)
+  Iniciar(A2, 1,99)
+  
+  Iniciar(R2, 3,1)
+  Iniciar(R1, 2,1)
+  Iniciar(Rf, 1,1)
+fin
+```
+
+#### ejercicio 2
+```
+
+programa ejemplo
+procesos
+  proceso etapa
+  variables
+    ca,av:numero
+  comenzar
+    repetir 10
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+      si(PosAv < 100)
+        mover
+        
+    BloquearEsquina(50,50)
+    ca:=PosCa
+    av:=PosAv
+    Pos(50,50)
+    
+    si(HayFlorEnLaBolsa)
+      mientras(HayFlorEnLaBolsa)
+        depositarFlor
+    Pos(av,ca)
+    LiberarEsquina(50,50)
+  fin
+  
+areas
+  af: AreaP(1,4,1,4)
+  a1: AreaP(1,1,100,1)
+  a2: AreaP(1,2,100,2)
+  a3: AreaP(1,3,100,3)
+  deposito:AreaC(50,50,50,50)
+  
+robots
+
+  robot tipo1
+  variables
+    ca,av,llave:numero
+  comenzar
+    derecha
+    RecibirMensaje(llave,Rf)
+    mientras(PosAv<100)
+      etapa
+      EnviarMensaje(1,Rf)
+      RecibirMensaje(llave,Rf)
+      
+    EnviarMensaje(0,Rf)
+  fin
+  
+  
+  robot fisca
+  variables
+    m1,m2,m3,cont:numero
+    llave:boolean
+  comenzar
+    llave:=V
+    
+    mientras(llave)
+      EnviarMensaje(1,R1)
+      EnviarMensaje(2,R2)
+      EnviarMensaje(3,R3)
+      
+      RecibirMensaje(m1,*)  
+      RecibirMensaje(m2,*)  
+      RecibirMensaje(m3,*)  
+      
+      si(m1=0)
+        si(m2=0)
+          si(m3=0)
+            llave:=F
+      
+    cont:=0  
+    Pos(50,50)
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cont:=cont+1
+    Informar(cont)  
+    Pos(1,4)
+  fin
+  
+  
+variables
+  R1: tipo1
+  R2: tipo1
+  R3: tipo1
+  Rf: fisca
+comenzar
+  AsignarArea(R1, deposito)
+  AsignarArea(R1, a1)
+  
+  AsignarArea(R2, deposito)
+  AsignarArea(R2, a2)
+  
+  AsignarArea(R3, deposito)
+  AsignarArea(R3, a3)
+  
+  AsignarArea(Rf, deposito)
+  AsignarArea(Rf, af)
+  
+  
+  Iniciar(R1, 1,1)
+  Iniciar(R2, 1,2)
+  Iniciar(R3, 1,3)
+  Iniciar(Rf, 1,4)
+fin
+```
+
+#### preguntas :
 * siempre tienen que tener id los trabajadores o los robots repetidos?
 * si no dice que se tiene que usar un robot fiscalizador lo puedo usar igual o asumo que no deberia usarlo?
