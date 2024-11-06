@@ -1990,6 +1990,252 @@ comenzar
 fin
 ```
 
+#### ejercicio 3
+```
+
+programa ejemplo
+procesos
+
+  proceso recolectar(ES x:numero)
+  comenzar
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      x:=x+1
+    Pos(1,5)
+    LiberarEsquina(10,10)
+  fin
+
+  proceso asignarId
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+  fin
+  
+  proceso depositarFlores(ES llave1:numero;ES llave2:numero)
+  variables
+    av,ca:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
+    Pos(av,ca)
+    LiberarEsquina(10,10)
+    llave1:=0
+    llave2:=0
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+
+  robot recolector
+  variables
+    llave1,llave2,id:numero
+    key:boolean
+  comenzar
+    RecibirMensaje(id,fisca)
+    Informar(id)
+    derecha
+    llave1:=0
+    llave2:=0
+    
+    mientras(PosAv<100)
+      si(HayFlorEnLaEsquina)
+        tomarFlor
+        llave1:=llave1+1
+      mover 
+      llave2:=llave2+1
+      si((llave1=10)| (llave2=5))
+        depositarFlores(llave1,llave2)
+        EnviarMensaje(id,fisca)
+        EnviarMensaje(1,fisca)
+        
+    si(HayFlorEnLaEsquina)
+      tomarFlor
+      llave1:=llave1+1
+      si((llave1=10)|  (llave2=5))
+        depositarFlores(llave1 , llave2)
+        EnviarMensaje(id,fisca)
+        EnviarMensaje(1,fisca)
+    
+    EnviarMensaje(id,fisca)
+    EnviarMensaje(0,fisca)
+  fin
+  
+  robot cosechador
+  variables
+    id,l1,l2,l3,x:numero
+    
+  comenzar
+    asignarId
+    x:=0
+    l1:=1
+    l2:=1
+    l3:=1
+    mientras((l1=1) | (l2=1))
+      RecibirMensaje(id,*)
+      si(id=1)
+        RecibirMensaje(l1,r1)
+        recolectar(x)
+      si(id=2)
+        RecibirMensaje(l2,r2)
+        recolectar(x)
+     
+    Informar(x)
+  fin
+  
+  
+variables
+  r1: recolector
+  r2: recolector  
+  fisca: cosechador
+comenzar
+  AsignarArea(fisca,ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(r1, ciudad)
+  
+  Iniciar(fisca, 1,5)
+  Iniciar(r2, 1,4)
+  Iniciar(r1, 1,3)
+  
+fin
+```
+
+#### ejercicio 4
+```
+
+programa ejemplo
+procesos
+  proceso depo
+  variables
+    av,ca:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
+    Pos(av,ca)
+    LiberarEsquina(10,10)
+  fin
+  
+  proceso asignarId
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  
+  proceso finalizar
+  comenzar
+    EnviarMensaje(0,r1)
+    EnviarMensaje(0,r1)
+    EnviarMensaje(0,r1)
+    
+    EnviarMensaje(0,r2)
+    EnviarMensaje(0,r2)
+    EnviarMensaje(0,r2)
+    
+    EnviarMensaje(0,r3)
+    EnviarMensaje(0,r3)
+    EnviarMensaje(0,r3)
+    
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+
+  robot florero
+  variables
+    id,llave,av,ca,avi,cont,cai:numero
+  comenzar
+    cont:=0
+    avi:=PosAv
+    cai:=PosCa
+    RecibirMensaje(id,fisca)
+    Informar(id)
+    
+    RecibirMensaje(llave,fisca)
+    RecibirMensaje(av,fisca)
+    RecibirMensaje(ca,fisca)
+    mientras(llave=1)
+       
+      Pos(av,ca)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        cont:=cont+1
+      Pos(avi,cai)
+      EnviarMensaje(1,fisca)
+      RecibirMensaje(llave,fisca)
+      RecibirMensaje(av,fisca)
+      RecibirMensaje(ca,fisca)
+    
+    depo
+    
+    EnviarMensaje(cont,fisca)
+    
+  fin
+  
+  robot fiscalizador
+  variables
+    x,av,ca,cont,y:numero
+  comenzar
+    asignarId
+    cont:=0
+    
+    repetir 8
+      Random(x,1,3)
+      Random(av,40,60)
+      Random(ca,40,60)
+      si(x=1)
+        EnviarMensaje(1,r1)
+        EnviarMensaje(av,r1)
+        EnviarMensaje(ca,r1)
+        RecibirMensaje(y,r1)
+      si(x=2)
+        EnviarMensaje(1,r2)
+        EnviarMensaje(av,r2)
+        EnviarMensaje(ca,r2)
+        RecibirMensaje(y,r2)
+      si(x=3)
+        EnviarMensaje(1,r3)
+        EnviarMensaje(av,r3)
+        EnviarMensaje(ca,r3)
+        RecibirMensaje(y,r3)
+      
+    finalizar 
+      
+    repetir 3
+      RecibirMensaje(y,*)
+      cont:=cont+y
+      
+      
+    Informar(cont)  
+    
+  fin
+  
+variables
+  r1: florero
+  r2: florero
+  r3: florero
+  fisca: fiscalizador
+comenzar
+  AsignarArea(r1, ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(r3, ciudad)
+  AsignarArea(fisca, ciudad)
+  
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 2,1)
+  Iniciar(r3, 3,1)
+  Iniciar(fisca, 4,1)
+fin
+```
 #### preguntas :
 * siempre tienen que tener id los trabajadores o los robots repetidos?
 * si no dice que se tiene que usar un robot fiscalizador lo puedo usar igual o asumo que no deberia usarlo?
