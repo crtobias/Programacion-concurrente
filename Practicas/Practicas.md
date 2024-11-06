@@ -2236,6 +2236,118 @@ comenzar
   Iniciar(fisca, 4,1)
 fin
 ```
+
+#### ejercicio 5
+```r-info
+
+programa ejemplo
+procesos
+  proceso darPapeles(E cant:numero)
+  comenzar
+    BloquearEsquina(100,1)
+    Pos(100,1)
+    repetir cant
+      depositarPapel
+    Pos(13,1)
+    LiberarEsquina(100,1)
+  fin
+  
+  proceso unoAUnoRecolectar(E x:numero)
+  variables
+    ca,av:numero
+  comenzar
+    ca:=PosCa
+    av:=PosAv
+    
+    repetir x
+      BloquearEsquina(100,1)
+      Pos(100,1)
+      tomarPapel
+      Pos(av,ca)
+      LiberarEsquina(100,1)
+      depositarPapel
+  fin
+  
+  proceso asignarId
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+
+
+  robot cliente
+  variables
+    id,cant:numero
+  comenzar
+    RecibirMensaje(id,Rserver)
+    Informar(id)
+    repetir 3
+      EnviarMensaje(id,Rserver)      
+      RecibirMensaje(cant,Rserver)
+      unoAUnoRecolectar(cant)
+      EnviarMensaje(1,Rserver)
+     
+    EnviarMensaje(id,Rserver)      
+    RecibirMensaje(cant,Rserver)
+    unoAUnoRecolectar(cant)
+    EnviarMensaje(0,Rserver)  
+
+  fin
+  
+  robot server
+  variables
+    llave:boolean
+    id,cant,uno,dos,tres:numero
+  comenzar
+    llave:=V
+    asignarId
+    uno:=1
+    dos:=1
+    tres:=1
+    mientras((uno=1) | (dos=1) | (tres=1))
+      RecibirMensaje(id,*)
+      Random(cant,1,5)
+      darPapeles(cant)
+      si(id=1)
+        EnviarMensaje(cant,r1)
+        RecibirMensaje(uno,r1)
+      si(id=2)
+        EnviarMensaje(cant,r2)
+        RecibirMensaje(dos,r2)
+      si(id=3)
+        EnviarMensaje(cant,r3)
+        RecibirMensaje(tres,r3)
+        
+  fin
+  
+  
+variables
+  Rserver: server
+  r1: cliente
+  r2: cliente
+  r3: cliente
+comenzar
+  AsignarArea(Rserver, ciudad)
+  AsignarArea(r1, ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(r3, ciudad)
+  
+  
+  Iniciar(r1, 10,1)
+  Iniciar(r2, 11,1)  
+  Iniciar(r3, 12,1)
+  Iniciar(Rserver, 13,1)
+fin
+```
+
+
+
+
 #### preguntas :
 * siempre tienen que tener id los trabajadores o los robots repetidos?
 * si no dice que se tiene que usar un robot fiscalizador lo puedo usar igual o asumo que no deberia usarlo?
