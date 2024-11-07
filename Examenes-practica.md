@@ -131,5 +131,92 @@ fin
 
 ```
 
+programa ejemplo
+procesos
+  proceso recorrido
+  variables
+    ca,av:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    si(HayFlorEnLaEsquina)
+      tomarFlor
+    Pos(av,ca)
+    LiberarEsquina(50,50)  
+  fin
+  
+  proceso enviarConfirmacion
+  comenzar
+    EnviarMensaje(9,rj)
+  fin
+  
+  proceso finalizar
+  comenzar
+    EnviarMensaje(0,r1)
+    EnviarMensaje(0,r2)
+    EnviarMensaje(0,r3)
+    EnviarMensaje(0,r4)
+  fin
+  
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+
+  robot limpiador
+  variables
+    x:numero
+  comenzar
+    RecibirMensaje(x,rj)
+    mientras(x=1)
+      recorrido {proceso}  
+      enviarConfirmacion {proceso}  
+      RecibirMensaje(x,rj)
+    
+    Informar(0000)
+  fin
+  
+  robot jefe
+  variables
+    x,c:numero
+  comenzar
+    repetir 5
+      Random(x,1,4)
+      si(x=1)
+        EnviarMensaje(1,r1)
+        RecibirMensaje(c,r1)
+      si(x=2)
+        EnviarMensaje(1,r2)
+        RecibirMensaje(c,r2)
+      si(x=3)
+        EnviarMensaje(1,r3)
+        RecibirMensaje(c,r3)
+      si(x=4)
+        EnviarMensaje(1,r4)
+        RecibirMensaje(c,r4)
+    
+        
+    finalizar {proceso}    
+  fin
+  
+variables
+  rj: jefe
+  r1: limpiador
+  r2: limpiador
+  r3: limpiador
+  r4: limpiador
+comenzar
+  AsignarArea(rj, ciudad)
+  AsignarArea(r1, ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(r3, ciudad)
+  AsignarArea(r4, ciudad)
+  Iniciar(rj, 1,1)
+  Iniciar(r1, 2,2)
+  Iniciar(r2, 3,3)
+  Iniciar(r3, 4,4)
+  Iniciar(r4, 5,5)
+fin
 ```
 
