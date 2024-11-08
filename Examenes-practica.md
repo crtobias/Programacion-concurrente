@@ -220,3 +220,161 @@ comenzar
 fin
 ```
 
+
+
+
+
+#### examen 5
+
+```
+
+programa ejemplo
+procesos
+  proceso asignarId
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+
+  proceso depositar(E x:numero)
+  variables
+    ca,av:numero
+  comenzar
+    ca:=PosCa
+    av:=PosAv
+    repetir x
+      BloquearEsquina(25,25)
+      Pos(25,25)
+      depositarFlor
+      Pos(av,ca)
+      LiberarEsquina(25,25)
+  fin
+
+
+  proceso verificarEsquina(ES cont:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cont:=cont+1
+  fin
+  
+  proceso Rectangulo(ES cont:numero;E av:numero;E ca:numero)
+  comenzar
+    repetir ca
+      verificarEsquina(cont)
+      mover
+    derecha
+    repetir av
+      verificarEsquina(cont)
+      mover
+    derecha
+    repetir ca
+      verificarEsquina(cont)
+      mover
+    derecha
+    
+    repetir av
+      verificarEsquina(cont)
+      mover
+  fin
+  
+  proceso enviarDato
+  variables
+    av,ca:numero
+  comenzar
+    Random(av,1,5)
+    Random(ca,1,10)
+    EnviarMensaje(av,r1)
+    EnviarMensaje(ca,r1)
+    
+    Random(av,1,5)
+    Random(ca,1,10)
+    EnviarMensaje(av,r2)
+    EnviarMensaje(ca,r2)
+    
+    Random(av,1,5)
+    Random(ca,1,10)
+    EnviarMensaje(av,r3)
+    EnviarMensaje(ca,r3)
+  fin
+  
+areas
+  a1: AreaP(1,1,6,11)
+  a2: AreaP(7,1,12,11)
+  a3: AreaP(13,1,18,11)
+  ac: AreaP(24,24,24,24)
+  depo: AreaPC(25,25,25,25)
+robots
+
+  robot tipo1
+  variables
+    cont,ca,av,id:numero
+  comenzar
+    RecibirMensaje(id,rc)
+    cont:=0
+    RecibirMensaje(av,rc)
+    RecibirMensaje(ca,rc)
+    Rectangulo(cont,av,ca)
+    
+    Informar(cont)
+    depositar(cont)
+    
+    EnviarMensaje(id,rc)
+    EnviarMensaje(cont,rc)
+    
+  fin
+  
+  robot cordinador
+  variables
+    memo,memoid,uno,id:numero
+  comenzar
+    uno:=0
+    asignarId
+    enviarDato
+    
+    repetir 3
+      RecibirMensaje(memoid,*)
+      si(memoid=1)
+        RecibirMensaje(memo,r1)
+        si(memo>uno)
+          uno:=memo
+          id:=memoid
+      si(memoid=2)
+        RecibirMensaje(memo,r2)
+        si(memo>uno)
+          uno:=memo
+          id:=memoid
+      si(memoid=3)
+        RecibirMensaje(memo,r3)
+        si(memo>uno)
+          uno:=memo
+          id:=memoid
+          
+    Informar(id)
+    Informar(uno)
+  fin
+  
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  rc: cordinador
+comenzar
+
+  AsignarArea(r1, a1)
+  AsignarArea(r2, a2)
+  AsignarArea(r3, a3)
+  AsignarArea(rc, ac)
+  
+  AsignarArea(r1, depo)
+  AsignarArea(r2, depo)
+  AsignarArea(r3, depo)
+  
+  Iniciar(rc, 24,24)
+  Iniciar(r1, 1,1)
+  Iniciar(r2, 7,1)
+  Iniciar(r3, 13,1)
+    
+fin
+```
